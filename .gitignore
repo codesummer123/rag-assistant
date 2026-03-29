@@ -37,3 +37,7 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+# project items
+data/index.faiss
+data/chunks_meta.json
