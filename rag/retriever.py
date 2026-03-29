@@ -48,4 +48,4 @@ def retrieve(query: str, k: int = 3) -> list[dict]:
             continue
         chunk = chunks[idx]
         results.append({"text": chunk["text"], "source": chunk["source"], "score": float(dist)})
-        return results
+    return results
