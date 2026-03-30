@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.git/
+.gitignore
+data/index.faiss
+data/chunks_meta.json
+evaluation/report.md
+*.md

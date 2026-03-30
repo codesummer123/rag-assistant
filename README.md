@@ -13,10 +13,11 @@ Current objective for this stage is to establish a reliable MVP pipeline:
 
 - ✅ FastAPI service initialized
 - ✅ Health check endpoint (`/health`)
-- 🚧 Indexing pipeline (in progress)
-- 🚧 Retrieval pipeline (in progress)
-- 🚧 Chat endpoint with citations (planned)
-- 🚧 Baseline evaluation script (planned)
+- ✅ Text chunking and FAISS index build
+- ✅ Vector retrieval pipeline
+- ✅ `/chat` endpoint with citations and latency
+- ✅ Baseline evaluation (source hit rate: 100%)
+- ✅ Dockerized
 
 ## Tech Stack
 
@@ -88,6 +89,16 @@ Expected response:
 docker build -t rag-assistant .
 docker run --rm -p 8000:8000 rag-assistant
 ```
+
+## Makefile Commands
+| Command | Description |
+|---------|-------------|
+| `make install` | Install dependencies |
+| `make run` | Start dev server |
+| `make index` | Build FAISS index from knowledge base |
+| `make eval` | Run evaluation script |
+| `make docker-build` | Build Docker image |
+| `make docker-run` | Run containerized service |
 
 ## Development Roadmap
 
