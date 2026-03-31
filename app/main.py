@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
 import time
 from app.schemas import ChatRequest, ChatResponse
+from rag.reranker import rerank
 from rag.retriever import retrieve
 from rag.generator import generate
+from rag.rewriter import rewrite_query
 
 app = FastAPI(title="RAG Assistant", version="0.1.0")
 
@@ -17,11 +19,21 @@ def chat(req: ChatRequest):
 
     start = time.time()
 
-    contexts = retrieve(req.query, k=3)
-    answer = generate(req.query, contexts)
+    # 1. 口语提取关键词
+    search_query = rewrite_query(req.query)
+    print(f"[chat] 原始问题：{req.query} -> 修改后：{search_query}")
+
+    # 2. 粗排检索
+    initial_contexts = retrieve(search_query)
+
+    # 3. 精排
+    final_contexts = rerank(req.query, initial_contexts, top_n=3)
+
+    # 4. 生成回答
+    answer = generate(req.query, final_contexts)
 
     latency_ms = int((time.time() - start) * 1000)
-    citations = list({c["source"] for c in contexts})
+    citations = list(c["source"] for c in final_contexts)
 
     return ChatResponse(
         answer=answer,
