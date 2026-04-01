@@ -1,12 +1,19 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
 import time
 from app.schemas import ChatRequest, ChatResponse
 from rag.reranker import rerank
-from rag.retriever import retrieve
+from rag.retriever import retrieve, init_retriever
 from rag.generator import generate
 from rag.rewriter import rewrite_query
 
-app = FastAPI(title="RAG Assistant", version="0.1.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_retriever()
+    yield
+
+app = FastAPI(title="RAG Assistant", version="0.2.1", lifespan=lifespan)
 
 @app.get("/health")
 def health_check():
